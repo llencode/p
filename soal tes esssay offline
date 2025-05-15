@@ -1,0 +1,89 @@
+Bagian A 
+    1.  => nano backup_wwww
+        => edit file :
+                source = "var/www"
+                backup_dir = "/backup"
+                backup_file = "backup_www_$(date+%F).tar.gz"
+        => save file
+        => tar -czvf "$source/$backup_file" "$backup_dir"
+            echo "Backup berhasil dibuat"
+        => ls -tr "/backup/$backup_file"/* | head -n -7 | xargs -r rm -f
+        => save
+        => chmod +x backup_www
+        => ./backup_wwww
+
+
+    2.  => useradd -m developer -d /home/developer -s /bin/bash 
+        => usermod -aG sudo developer
+        => open file, nano /etc/sudoers
+            edit file add :
+            developer       ALL=(ALL:ALL) ALL
+        => save exit 
+        => exit
+        => relogin user : developer
+
+BAGIAN B
+    1. alphine 
+    version: "1" = version dibuat 
+services:
+  your-service-name:
+    image: alpine:latest = image service digunakan 
+    container_name: container_alphine = nama container
+    ports:
+      - "8080:80" = port supaya bisa diakses diluar
+     
+
+    nginx =>
+      version: '1' version digunakan 
+services:
+  nginx:
+    image: nginx:latest versi terakhir
+    ports:
+      - "80:80" port digunakan untuk bisa diakses luar
+      - "443:443"
+    volumes: = lokasi service file nginx digunakan 
+      - ./nginx/conf.d:/etc/nginx/conf.d 
+      - ./nginx/ssl:/etc/nginx/ssl
+      - ./html:/usr/share/nginx/html
+      container_name: container_nginx = nama container
+    restart: always
+
+    => php 
+    version: '1'
+services:
+  web:
+    image: php:8-apache => image php service
+    container_name: php-container = nama php
+    ports:
+      - "8080:80" => port bisa diakses diluar
+    volumes:
+      - .:/var/www/html => lokasi project 
+
+BAGIAN C
+
+6. nginx 502 artinya service nginx tidak ada akses inet keluar 
+    restart systemcl nginx
+    jika failed cek nginx.conf pastikak sysntax tidak ada yang typo 
+    lokasi folder sesuai dengan config nginx.conf
+    pastikan file nginx enable 
+
+7.   SSH : 
+    iptables -A INPUT -s (ip tujuan) -p tcp --dport 22 -j ACCEPT 
+
+
+    ip tables port 8- dan 443 atau http dan https bisa akes keluar 
+    - 1. iptables -A INPUT -p tcp --dport 80 -j ACCEPT
+      2. iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+
+    drop semua koneksi lainnya
+    iptables -A INPUT -s (iptujuan) -j DROP
+
+8. Nmap:
+Alat untuk mendeteksi perangkat, host, port terbuka, dan risiko keamanan dalam jaringan, serta dapat memantau single host maupun jaringan luas. 
+Metasploit:
+Framework yang memungkinkan pentester untuk menulis, menguji, dan mengeksekusi kode exploit untuk menguji kerentanan, menghitung jaringan, mengeksekusi serangan, dan menghindari deteksi. 
+Wireshark:
+Alat untuk menganalisa protokol jaringan, yang dapat digunakan untuk melihat detail protokol, mengidentifikasi masalah jaringan, dan menganalisa kinerja
+
+
+
